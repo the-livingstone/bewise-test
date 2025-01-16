@@ -1,3 +1,4 @@
+import asyncio
 import uvicorn
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
@@ -5,7 +6,11 @@ from fastapi.responses import JSONResponse
 import app.config as config
 from app.routes import router
 from app.errors import RepresentativeError
+from app.db.base import Base, engine
 
+async def create_tables() -> None:
+    async with engine.begin() as connection:
+        await connection.run_sync(Base.metadata.create_all)
 
 def get_app() -> FastAPI:
     docs_url = "/_docs" if config.DEBUG else None
@@ -24,6 +29,8 @@ def get_app() -> FastAPI:
 
 
 if __name__ == "__main__":
+    asyncio.run(create_tables())
+
     uvicorn.run(
         "app.main:get_app",
         factory=True,

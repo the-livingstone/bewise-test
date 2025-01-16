@@ -1,23 +1,21 @@
 import logging
-
-from sqlalchemy import MetaData, NullPool
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-from app.config import config
+import app.config as config
 
 logger = logging.getLogger(__name__)
 
 PG_URL = (
-    f"postgresql+asyncpg://{config.postgres.user}:{config.postgres.password}"
-    f"@{config.postgres.host}:{config.postgres.port}/{config.postgres.name}"
+    f"postgresql+asyncpg://{config.POSTGRES_USER}:{config.POSTGRES_PASSWORD}"
+    f"@{config.POSTGRES_HOST}:{config.POSTGRES_PORT}/{config.POSTGRES_NAME}"
 )
 PG_URL_MIGRATIONS = PG_URL.replace("asyncpg", "psycopg2")
 
 Base = declarative_base()
 engine_params = dict(
-    pool_size=config.postgres.MIN_POOL_SIZE,
-    max_overflow=config.postgres.MIN_POOL_SIZE + config.postgres.MAX_POOL_SIZE,
+    pool_size=config.POSTGRES_MIN_POOL_SIZE,
+    max_overflow=config.POSTGRES_MIN_POOL_SIZE + config.POSTGRES_MAX_POOL_SIZE,
 )
 
 engine = create_async_engine(

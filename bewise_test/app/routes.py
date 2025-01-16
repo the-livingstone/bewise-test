@@ -19,7 +19,7 @@ async def create_application(intake: ApplicationSchema, service: ApplicationServ
 async def get_applications(
     repo: ApplicationRepo = Depends(get_sqla_repo(ApplicationRepo)),
     user_name: str = Q('username', None, description='filter aapplications by username'),
-    page: int = Q('page', 0, description='page'),
+    page: int = Q('page', 1, description='page'),
     page_size: int = Q("page size", 10, description="page_size"),
 ):
     """

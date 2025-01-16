@@ -7,6 +7,7 @@ from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.db.repos import BaseSqlaRepo
+from app.service import ApplicationService
 
 
 _logger = logging.getLogger(__name__)
@@ -25,3 +26,6 @@ def get_sqla_repo(repo_type: Type[TSqlaRepo]) -> Callable[[AsyncSession], TSqlaR
         return repo_type(conn)
 
     return func
+
+def get_service(session: AsyncSession = Depends(get_sqla_session)):
+    return ApplicationService(session)

@@ -14,7 +14,8 @@ class ApplicationService:
         self.messages = KafkaPublisher()
 
     async def create_application(self, intake: ApplicationSchema):
-        model = Application.model_validate(intake)
+        model = Application.model_validate(intake.model_dump())
         await self.applications.create(model)
-        await self.messages.send(model)
+        await self.session.commit()
+        # await self.messages.send(model)
         return model
