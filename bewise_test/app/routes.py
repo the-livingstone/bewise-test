@@ -8,18 +8,22 @@ from app.service import ApplicationService
 
 router = APIRouter()
 
+
 @router.post("/applications")
-async def create_application(intake: ApplicationSchema, service: ApplicationService = Depends(get_service)):
+async def create_application(
+    intake: ApplicationSchema, service: ApplicationService = Depends(get_service)
+):
     """
     Разместить заявку
     """
     return await service.create_application(intake)
 
+
 @router.get("/applications")
 async def get_applications(
     repo: ApplicationRepo = Depends(get_sqla_repo(ApplicationRepo)),
-    user_name: str = Q('username', None, description='filter applications by username'),
-    page: int = Q('page', 1, description='page'),
+    user_name: str = Q("username", None, description="filter applications by username"),
+    page: int = Q("page", 1, description="page"),
     page_size: int = Q("page size", 10, description="page_size"),
 ):
     """

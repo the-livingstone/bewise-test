@@ -7,8 +7,10 @@ from app.schemas import ApplicationSchema
 
 
 class ApplicationService:
-    
-    def __init__(self, session: AsyncSession, message_publisher: KafkaPublisher) -> None:
+
+    def __init__(
+        self, session: AsyncSession, message_publisher: KafkaPublisher
+    ) -> None:
         self.session = session
         self.applications = ApplicationRepo(session)
         self.messages = message_publisher

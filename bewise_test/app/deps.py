@@ -23,13 +23,17 @@ TSqlaRepo = TypeVar("TSqlaRepo", bound=BaseSqlaRepo)
 
 
 def get_sqla_repo(repo_type: Type[TSqlaRepo]) -> Callable[[AsyncSession], TSqlaRepo]:
-    def func(conn: AsyncSession = Depends(get_sqla_session, use_cache=True)) -> TSqlaRepo:
+    def func(
+        conn: AsyncSession = Depends(get_sqla_session, use_cache=True)
+    ) -> TSqlaRepo:
         return repo_type(conn)
 
     return func
 
+
 def get_publisher(request: Request) -> KafkaPublisher:
     return request.app.state.producer
+
 
 def get_service(
     session: AsyncSession = Depends(get_sqla_session),

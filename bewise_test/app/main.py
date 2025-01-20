@@ -10,13 +10,17 @@ from app.errors import RepresentativeError
 from app.db.base import Base, engine
 from bewise_test.app.messages import KafkaPublisher
 
+
 async def create_tables() -> None:
     async with engine.begin() as connection:
         await connection.run_sync(Base.metadata.create_all)
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    app.state.producer = KafkaPublisher(bootstrap_servers=[f"{config.KAFKA_SERVER}:{config.KAFKA_PORT}"])
+    app.state.producer = KafkaPublisher(
+        bootstrap_servers=[f"{config.KAFKA_SERVER}:{config.KAFKA_PORT}"]
+    )
     await app.state.producer.start()
     yield
     await app.state.producer.stop()
