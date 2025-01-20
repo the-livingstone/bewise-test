@@ -1,6 +1,6 @@
 # bewise-test
 
-# Запуск приложения
+### Запуск приложения
 
 ```
 cp env.example .env
