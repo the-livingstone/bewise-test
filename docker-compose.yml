@@ -13,6 +13,19 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ${POSTGRES_NAME}
 
+  kafka:
+    image: apache/kafka:latest
+    platform: linux/amd64
+    shm_size: 1g
+    restart: always
+    environment:
+      KAFKA_LISTENERS: CONTROLLER://localhost:9091,HOST://0.0.0.0:9092
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+    ports:
+      - ${KAFKA_PORT}:${KAFKA_PORT}
+    command: /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --create --topic applications
+
   fastapi:
     platform: linux/amd64
     build:
@@ -22,3 +35,5 @@ services:
       - ${API_PORT}:${API_PORT}
     volumes:
       - ./app:/app
+    depends_on:
+      - kafka

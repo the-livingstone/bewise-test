@@ -15,3 +15,6 @@ POSTGRES_PORT: int = config("POSTGRES_PORT", cast=int, default=5432)
 POSTGRES_NAME: str = config("POSTGRES_NAME", default="db")
 POSTGRES_MIN_POOL_SIZE: int = config("POSTGRES_MIN_POOL_SIZE", cast=int, default=1)
 POSTGRES_MAX_POOL_SIZE: int = config("POSTGRES_MAX_POOL_SIZE", cast=int, default=5)
+
+KAFKA_SERVER: str = config("KAFKA_SERVER", default="kafka")
+KAFKA_PORT: int = config("KAFKA_PORT", cast=int, default=9092)

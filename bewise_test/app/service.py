@@ -8,14 +8,14 @@ from app.schemas import ApplicationSchema
 
 class ApplicationService:
     
-    def __init__(self, session: AsyncSession) -> None:
+    def __init__(self, session: AsyncSession, message_publisher: KafkaPublisher) -> None:
         self.session = session
         self.applications = ApplicationRepo(session)
-        self.messages = KafkaPublisher()
+        self.messages = message_publisher
 
     async def create_application(self, intake: ApplicationSchema):
         model = Application.model_validate(intake.model_dump())
         await self.applications.create(model)
         await self.session.commit()
-        # await self.messages.send(model)
+        await self.messages.publish_message(model)
         return model
